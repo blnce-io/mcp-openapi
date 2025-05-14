@@ -1,5 +1,3 @@
-import { getConfig } from '../infra/config';
-
 export interface LogContext {
   [key: string]: any;
 }
@@ -16,19 +14,7 @@ export interface Logger {
 }
 
 export class ConsoleLogger implements Logger {
-  private isEnabled: boolean;
-
-  constructor() {
-    // Check for LOG_ENABLED environment variable
-    this.isEnabled = getConfig('LOG_ENABLED') === 'true';
-  }
-
   private log(level: string, messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
-    // If logging is not enabled, return early
-    if (!this.isEnabled) {
-      return;
-    }
-
     const timestamp = new Date().toISOString();
     let message: string;
     let context: LogContext | undefined;
