@@ -1,3 +1,5 @@
+import { getConfig } from '../infra/config';
+
 export interface LogContext {
   [key: string]: any;
 }
@@ -18,7 +20,7 @@ export class ConsoleLogger implements Logger {
 
   constructor() {
     // Check for LOG_ENABLED environment variable
-    this.isEnabled = process.env.LOG_ENABLED === 'true';
+    this.isEnabled = getConfig('LOG_ENABLED') === 'true';
   }
 
   private log(level: string, messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
