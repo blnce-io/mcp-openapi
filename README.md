@@ -1,4 +1,6 @@
-# @reapi/mcp-openapi
+# mcp-openapi
+
+Fork of open-source MCP server by [ReAPI](https://reapi.com)
 
 A Model Context Protocol (MCP) server that loads and serves multiple OpenAPI specifications to enable LLM-powered IDE integrations. This server acts as a bridge between your OpenAPI specifications and LLM-powered development tools like Cursor and other code editors.
 
@@ -9,26 +11,6 @@ A Model Context Protocol (MCP) server that loads and serves multiple OpenAPI spe
 - Enables LLMs to understand and work with your APIs directly in your IDE
 - Supports dereferenced schemas for complete API context
 - Maintains a catalog of all available APIs
-
-## Powered by [ReAPI](https://reapi.com)
-
-This open-source MCP server is sponsored by [ReAPI](https://reapi.com), a next-generation API platform that simplifies API design and testing. While this server provides local OpenAPI integration for development, ReAPI offers two powerful modules:
-
-### 🎨 API CMS
-- Design APIs using an intuitive no-code editor
-- Generate and publish OpenAPI specifications automatically
-- Collaborate with team members in real-time
-- Version control and change management
-
-### 🧪 API Testing
-- The most developer-friendly no-code API testing solution
-- Create and manage test cases with an intuitive interface
-- Powerful assertion and validation capabilities
-- Serverless cloud test executor
-- Perfect for both QA teams and developers
-- CI/CD integration ready
-
-Try ReAPI for free at [reapi.com](https://reapi.com) and experience the future of API development.
 
 ## Cursor Configuration
 
