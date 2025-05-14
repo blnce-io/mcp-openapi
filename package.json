@@ -17,6 +17,7 @@
     "node": ">=22"
   },
   "scripts": {
+    "start": "node --env-file ./.env ./dist/index.mjs",
     "build": "unbuild",
     "debug": "SERVER_PORT=9000 LOG_ENABLED=true npx @modelcontextprotocol/inspector npx tsx src/index.ts",
     "test": "LOG_ENABLED=true vitest run",
