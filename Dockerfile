@@ -10,6 +10,8 @@ FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} As c
 
 WORKDIR /usr/src/app
 
+RUN npm install -g pnpm@latest-10
+
 COPY package.json .
 COPY pnpm-lock.yaml .
 RUN pnpm --prod install
@@ -18,6 +20,8 @@ RUN cp -R node_modules prod_node_modules
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} as development
 
 WORKDIR /usr/src/app
+
+RUN npm install -g pnpm@latest-10
 
 COPY package.json .
 COPY pnpm-lock.yaml .
