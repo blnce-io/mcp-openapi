@@ -249,7 +249,3 @@ Here are some example prompts you can use in Cursor IDE to interact with your AP
    ```
 
 These prompts demonstrate how to leverage the MCP server's capabilities for API development. Feel free to adapt them to your specific needs or combine them for more complex tasks.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. 
