@@ -32,13 +32,13 @@ export class ConsoleLogger implements Logger {
       if (context) {
         logger.error(message, {level: level.toLowerCase(), ...context})
       } else {
-        logger.error(message, {level})
+        logger.error(message, {level: level.toLowerCase()})
       }
     } else {
       if (context) {
         logger.log(message, {level: level.toLowerCase(), ...context})
       } else {
-        logger.log(message, {level})
+        logger.log(message, {level: level.toLowerCase()})
       }
     }
   }
