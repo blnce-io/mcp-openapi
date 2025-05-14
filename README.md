@@ -4,6 +4,13 @@ Fork of open-source MCP server by [ReAPI](https://reapi.com)
 
 A Model Context Protocol (MCP) server that loads and serves multiple OpenAPI specifications to enable LLM-powered IDE integrations. This server acts as a bridge between your OpenAPI specifications and LLM-powered development tools like Cursor and other code editors.
 
+## Set up
+
+- `pnpm install`
+- `pnpm build`
+- Put some OpenAPI JSONs in the `/openapi-specs` directory
+- `pnpm start`
+
 ## Features
 
 - Loads multiple OpenAPI specifications from a directory
