@@ -1,3 +1,4 @@
+import path from 'path';
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { SpecServiceConfig } from "./core/interfaces/ISpecService";
 import { ConsoleLogger } from "./core/Logger";
@@ -8,7 +9,7 @@ import { McpService } from "./McpService";
 
 // Configuration for the spec service
 const specServiceConfig: SpecServiceConfig = {
-  basePath: "/Users/peisong/Documents/apis",
+  basePath: path.join(process.cwd(), 'openapi-specs'),
   catalogDir: "_catalog",
   dereferencedDir: "_dereferenced",
   retryAttempts: 3,
