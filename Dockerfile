@@ -50,7 +50,7 @@ COPY --from=cache --chown=${UID}:${GID} /usr/src/app/prod_node_modules ./node_mo
 COPY --from=development --chown=${UID}:${GID} /usr/src/app/package.json .
 COPY --from=development --chown=${UID}:${GID} /usr/src/app/pnpm-lock.yaml .
 
-COPY --from=development --chown=${UID}:${GID} /usr/src/app/server/dist ./dist
+COPY --from=development --chown=${UID}:${GID} /usr/src/app/dist ./dist
 
 USER ${UID}:${GID}
 CMD ["node", "dist/http-server.mjs"]
