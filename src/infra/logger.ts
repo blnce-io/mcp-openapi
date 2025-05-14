@@ -4,6 +4,7 @@ export function log(...args: unknown[]): void {
   const context = getRequestContext();
   console.log(
     JSON.stringify({
+      time: Date.now(),
       requestId: context?.requestId,
       log: args.map((arg) => mapArg(arg)),
     }),
@@ -14,6 +15,7 @@ export function error(...args: unknown[]): void {
   const context = getRequestContext();
   console.error(
     JSON.stringify({
+      time: Date.now(),
       requestId: context?.requestId,
       log: args.map((arg) => mapArg(arg)),
     }),
