@@ -15,7 +15,6 @@ export interface Logger {
 
 export class ConsoleLogger implements Logger {
   private log(level: string, messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
-    const timestamp = new Date().toISOString();
     let message: string;
     let context: LogContext | undefined;
 
@@ -27,8 +26,15 @@ export class ConsoleLogger implements Logger {
       context = messageOrContext;
     }
 
-    const contextStr = context ? ` ${JSON.stringify(context)}` : '';
-    console.log(`${timestamp} [${level}] ${message}${contextStr}`);
+    let stdStream = console.log;
+    if (level === 'ERROR') {
+      stdStream = console.error;
+    }
+    stdStream(JSON.stringify({
+      time: Date.now(),
+      level: level.toLowerCase(),
+      log: [message, context].filter(v => !!v)
+    }));
   }
 
   debug(messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
