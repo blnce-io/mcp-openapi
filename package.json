@@ -17,7 +17,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "start": "node --env-file ./.env ./dist/index.mjs",
+    "start": "node --env-file ./.env ./dist/http-server.mjs",
     "build": "unbuild",
     "debug": "SERVER_PORT=9000 LOG_ENABLED=true npx @modelcontextprotocol/inspector npx tsx src/index.ts",
     "test": "LOG_ENABLED=true vitest run",
@@ -40,10 +40,12 @@
   "packageManager": "pnpm@10.4.1",
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "^11.9.3",
-    "@modelcontextprotocol/sdk": "^1.8.0",
+    "@modelcontextprotocol/sdk": "^1.11.2",
     "@types/axios": "^0.14.4",
     "axios": "^1.8.4",
+    "body-parser": "^2.2.0",
     "commander": "^12.0.0",
+    "express": "^5.1.0",
     "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
     "openapi-types": "^12.1.3",
@@ -52,6 +54,8 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^5.0.1",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.14",
     "@vitest/coverage-v8": "^1.4.0",
