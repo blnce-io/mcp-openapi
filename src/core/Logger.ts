@@ -1,3 +1,5 @@
+import * as logger from '../infra/logger';
+
 export interface LogContext {
   [key: string]: any;
 }
@@ -26,15 +28,19 @@ export class ConsoleLogger implements Logger {
       context = messageOrContext;
     }
 
-    let stdStream = console.log;
     if (level === 'ERROR') {
-      stdStream = console.error;
+      if (context) {
+        logger.error(message, {level: level.toLowerCase(), ...context})
+      } else {
+        logger.error(message, {level})
+      }
+    } else {
+      if (context) {
+        logger.log(message, {level: level.toLowerCase(), ...context})
+      } else {
+        logger.log(message, {level})
+      }
     }
-    stdStream(JSON.stringify({
-      time: Date.now(),
-      level: level.toLowerCase(),
-      log: [message, context].filter(v => !!v)
-    }));
   }
 
   debug(messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
