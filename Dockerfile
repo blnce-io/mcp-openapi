@@ -25,7 +25,7 @@ RUN npm install -g pnpm@latest-10
 
 COPY package.json .
 COPY pnpm-lock.yaml .
-RUN pnpm --dev install
+RUN pnpm install
 
 COPY . .
 
