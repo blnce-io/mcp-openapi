@@ -29,17 +29,9 @@ export class ConsoleLogger implements Logger {
     }
 
     if (level === 'ERROR') {
-      if (context) {
-        logger.error(message, {level: level.toLowerCase(), ...context})
-      } else {
-        logger.error(message, {level: level.toLowerCase()})
-      }
+      logger.error(message, { level: level.toLowerCase(), ...context });
     } else {
-      if (context) {
-        logger.log(message, {level: level.toLowerCase(), ...context})
-      } else {
-        logger.log(message, {level: level.toLowerCase()})
-      }
+      logger.log(message, { level: level.toLowerCase(), ...context });
     }
   }
 
