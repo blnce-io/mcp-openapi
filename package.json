@@ -23,6 +23,7 @@
     "test": "LOG_ENABLED=true vitest run",
     "test:watch": "LOG_ENABLED=true vitest",
     "test:coverage": "LOG_ENABLED=true vitest run --coverage",
+    "lint": "pnpm eslint .",
     "format": "pnpm prettier --write .",
     "check-pretty": "pnpm prettier --check ."
   },
@@ -56,13 +57,23 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
     "@types/body-parser": "^1.19.5",
     "@types/express": "^5.0.1",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.14",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
     "@vitest/coverage-v8": "^1.4.0",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.1.0",
     "prettier": "^3.5.3",
     "tsx": "^4.19.3",
+    "typescript-eslint": "^8.32.1",
     "unbuild": "^3.5.0",
     "vitest": "^1.6.1"
   }
