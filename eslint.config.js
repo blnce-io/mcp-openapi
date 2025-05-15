@@ -28,6 +28,7 @@ export default tseslint.config(
       'import/no-cycle': 'error',
       'import/no-useless-path-segments': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
 );
