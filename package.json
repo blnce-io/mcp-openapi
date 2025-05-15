@@ -22,7 +22,9 @@
     "debug": "SERVER_PORT=9000 LOG_ENABLED=true npx @modelcontextprotocol/inspector npx tsx src/index.ts",
     "test": "LOG_ENABLED=true vitest run",
     "test:watch": "LOG_ENABLED=true vitest",
-    "test:coverage": "LOG_ENABLED=true vitest run --coverage"
+    "test:coverage": "LOG_ENABLED=true vitest run --coverage",
+    "format": "pnpm prettier --write .",
+    "check-pretty": "pnpm prettier --check ."
   },
   "keywords": [
     "openapi",
@@ -59,6 +61,7 @@
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.14",
     "@vitest/coverage-v8": "^1.4.0",
+    "prettier": "^3.5.3",
     "tsx": "^4.19.3",
     "unbuild": "^3.5.0",
     "vitest": "^1.6.1"
