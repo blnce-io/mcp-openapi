@@ -23,6 +23,7 @@
     "test": "LOG_ENABLED=true vitest run",
     "test:watch": "LOG_ENABLED=true vitest",
     "test:coverage": "LOG_ENABLED=true vitest run --coverage",
+    "type-check": "tsc --noEmit",
     "lint": "pnpm eslint .",
     "format": "pnpm prettier --write .",
     "check-pretty": "pnpm prettier --check ."
@@ -74,6 +75,7 @@
     "globals": "^16.1.0",
     "prettier": "^3.5.3",
     "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1",
     "unbuild": "^3.5.0",
     "vitest": "^1.6.1"
