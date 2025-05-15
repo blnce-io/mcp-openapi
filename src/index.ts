@@ -35,4 +35,7 @@ const server = new McpService(specService).createServer();
 
 // Start receiving messages on stdin and sending messages on stdout
 const transport = new StdioServerTransport();
-await server.connect(transport);
+server.connect(transport).catch((error) => {
+  logger.error(error);
+  process.exit(1);
+});
