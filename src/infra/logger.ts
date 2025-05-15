@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { getRequestContext } from './request-context.ts';
+import { getRequestContext } from './request-context';
 
 export function log(...args: unknown[]): void {
   const context = getRequestContext();
