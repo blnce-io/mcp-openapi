@@ -80,7 +80,7 @@ describe('DefaultSpecProcessor', () => {
         },
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValue(mockDereferencedSpec as any);
+      vi.mocked($RefParser.dereference).mockResolvedValue(mockDereferencedSpec as never);
 
       const result = await processor.process(mockSpec);
 
@@ -140,7 +140,7 @@ describe('DefaultSpecProcessor', () => {
 
       // Mock successful dereferencing even with circular references
       const mockDereferencedSpec = { ...mockSpec };
-      vi.mocked($RefParser.dereference).mockResolvedValue(mockDereferencedSpec as any);
+      vi.mocked($RefParser.dereference).mockResolvedValue(mockDereferencedSpec as never);
 
       const result = await processor.process(mockSpec);
 
@@ -193,7 +193,7 @@ describe('DefaultSpecProcessor', () => {
         required: ['name', 'email'],
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       expect(result.components?.schemas?.TestSchema).toEqual(expectedSchema);
@@ -260,7 +260,7 @@ describe('DefaultSpecProcessor', () => {
         },
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       expect(result.components?.schemas?.NestedSchema).toEqual(expectedSchema);
@@ -310,7 +310,7 @@ describe('DefaultSpecProcessor', () => {
         },
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       expect(result.components?.schemas?.ArraySchema).toEqual(expectedSchema);
@@ -350,7 +350,7 @@ describe('DefaultSpecProcessor', () => {
         deprecated: true,
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       expect(result.components?.schemas?.TestSchema).toEqual(expectedSchema);
@@ -381,7 +381,7 @@ describe('DefaultSpecProcessor', () => {
         },
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       expect(result.components?.schemas?.EmptyAllOf).toStrictEqual(expectedSchema);
@@ -430,7 +430,7 @@ describe('DefaultSpecProcessor', () => {
         },
       };
 
-      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
+      vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as never);
 
       const result = await processor.process(spec);
       const requestSchema = (result.paths['/test']?.post?.requestBody as OpenAPIV3.RequestBodyObject)?.content?.[

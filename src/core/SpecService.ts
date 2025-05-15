@@ -12,8 +12,6 @@ import {
   SpecCatalogEntry,
   LoadSchemaResult,
   LoadOperationResult,
-  IResultSerializer,
-  SpecUri,
   SpecOperationEntry,
   SpecSchemaEntry,
 } from './interfaces/ISpecService';

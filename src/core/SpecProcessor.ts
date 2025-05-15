@@ -126,6 +126,7 @@ export class DefaultSpecProcessor implements ISpecProcessor {
 
     // If allOf is empty, remove it and return the rest of the schema
     if (schema.allOf.length === 0) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { allOf, ...rest } = schema;
       return rest;
     }
@@ -137,6 +138,7 @@ export class DefaultSpecProcessor implements ISpecProcessor {
     const mergedSchema = this.mergeSchemas(processedSchemas);
 
     // Remove the allOf property and merge with any other properties from the original schema
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { allOf, ...rest } = schema;
     return this.mergeSchemas([mergedSchema, rest]);
   }
@@ -173,7 +175,7 @@ export class DefaultSpecProcessor implements ISpecProcessor {
       // Merge other fields
       for (const [key, value] of Object.entries(schema)) {
         if (key !== 'properties' && key !== 'required' && key !== 'type') {
-          (merged as any)[key] = value;
+          merged[key] = value;
         }
       }
     }

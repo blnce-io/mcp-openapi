@@ -193,6 +193,6 @@ export class DefaultSpecScanner implements ISpecScanner {
    * @returns The extracted spec ID
    */
   private extractSpecId(spec: OpenAPIV3.Document, defaultId: string): string {
-    return (spec.info as any)['x-spec-id'] || defaultId;
+    return spec.info['x-spec-id'] || defaultId;
   }
 }

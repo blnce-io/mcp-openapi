@@ -94,7 +94,7 @@ export class McpService {
         query: z.string(),
         specId: z.string().optional(),
       },
-      async (args, extra) => {
+      async (args) => {
         try {
           this.logger.debug('Searching API operations', { query: args.query, specId: args.specId });
           const operations = await this.specExplorer.searchOperations(args.query, args.specId);
@@ -115,7 +115,7 @@ export class McpService {
         query: z.string(),
         specId: z.string().optional(),
       },
-      async (args, extra) => {
+      async (args) => {
         try {
           this.logger.debug('Searching API schemas', { query: args.query, specId: args.specId });
           const schemas = await this.specExplorer.searchSchemas(args.query, args.specId);
@@ -136,7 +136,7 @@ export class McpService {
         specId: z.string(),
         operationId: z.string(),
       },
-      async (args, extra) => {
+      async (args) => {
         try {
           this.logger.debug('Loading API operation by ID', { specId: args.specId, operationId: args.operationId });
           const operation = await this.specExplorer.findOperationById(args.specId, args.operationId);
@@ -165,7 +165,7 @@ export class McpService {
         path: z.string(),
         method: z.string(),
       },
-      async (args, extra) => {
+      async (args) => {
         try {
           this.logger.debug('Loading API operation by path and method', {
             specId: args.specId,
@@ -202,7 +202,7 @@ export class McpService {
         specId: z.string(),
         schemaName: z.string(),
       },
-      async (args, extra) => {
+      async (args) => {
         try {
           this.logger.debug('Loading API schema', { specId: args.specId, schemaName: args.schemaName });
           const schema = await this.specExplorer.findSchemaByName(args.specId, args.schemaName);
@@ -232,8 +232,8 @@ export class McpService {
         query: z.string(),
         specId: z.string().optional(),
       },
-      async (args, extra) => {
-        const operations = await this.specExplorer.searchOperations(args.query, args.specId);
+      async (args) => {
+        await this.specExplorer.searchOperations(args.query, args.specId);
         return {
           messages: [
             {
@@ -255,7 +255,7 @@ export class McpService {
         operationId: z.string(),
         specId: z.string(),
       },
-      async (args, extra) => {
+      async (args) => {
         const operation = await this.specExplorer.findOperationById(args.specId, args.operationId);
         return {
           messages: [
@@ -279,7 +279,7 @@ export class McpService {
         path: z.string(),
         method: z.string(),
       },
-      async (args, extra) => {
+      async (args) => {
         const operation = await this.specExplorer.findOperationByPathAndMethod(args.specId, args.path, args.method);
         return {
           messages: [
@@ -294,13 +294,5 @@ export class McpService {
         };
       },
     );
-  }
-
-  private setUpResources(server: McpServer) {
-    // server.resource({
-    //   name: "api-operations",
-    //   description: "API operations",
-    //   schema: z.object({}),
-    // });
   }
 }

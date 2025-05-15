@@ -1,7 +1,7 @@
 import * as logger from '../infra/logger';
 
 export interface LogContext {
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Logger {
