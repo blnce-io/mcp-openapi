@@ -2,9 +2,7 @@ ARG UID=node
 ARG GID=node
 ARG node_version=22.13.0
 ARG alpine_version=3.20
-
-# or Docker Hub
-ARG docker_images_registry=223287545160.dkr.ecr.us-east-2.amazonaws.com
+ARG docker_images_registry=docker.io
 
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} As cache
 
