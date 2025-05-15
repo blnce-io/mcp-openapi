@@ -1,11 +1,11 @@
 import path from 'path';
-import { SpecServiceConfig } from './core/interfaces/ISpecService';
+import type { SpecServiceConfig } from './core/interfaces/ISpecService';
 import { McpService } from './McpService';
 import { ConsoleLogger } from './core/Logger';
 import { FileSystemSpecService } from './core/SpecService';
 import { DefaultSpecScanner } from './core/SpecScanner';
 import { DefaultSpecProcessor } from './core/SpecProcessor';
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { getConfig } from './infra/config';
 
 let server: McpServer | null = null;

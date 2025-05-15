@@ -1,10 +1,10 @@
 import fs from 'fs/promises';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import path from 'path';
 import swagger2openapi from 'swagger2openapi';
 import { parse } from 'yaml';
-import { ISpecProcessor } from './interfaces/ISpecProcessor';
-import { ISpecScanner, SpecFileType, SpecScanResult } from './interfaces/ISpecScanner';
+import type { ISpecProcessor } from './interfaces/ISpecProcessor';
+import type { ISpecScanner, SpecFileType, SpecScanResult } from './interfaces/ISpecScanner';
 
 /**
  * Custom error class for spec scanning related errors

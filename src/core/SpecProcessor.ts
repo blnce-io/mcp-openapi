@@ -1,6 +1,6 @@
 import $RefParser from '@apidevtools/json-schema-ref-parser';
-import { OpenAPIV3 } from 'openapi-types';
-import { ISpecProcessor } from './interfaces/ISpecProcessor';
+import type { OpenAPIV3 } from 'openapi-types';
+import type { ISpecProcessor } from './interfaces/ISpecProcessor';
 
 /**
  * Represents a JSON Schema object with potential allOf combinations

@@ -1,11 +1,12 @@
 import fs from 'fs/promises';
 import Fuse from 'fuse.js';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import path from 'path';
 import { SimpleCache } from './Cache';
-import { ConsoleLogger, Logger } from './Logger';
-import { ISpecScanner } from './interfaces/ISpecScanner';
-import {
+import type { Logger } from './Logger';
+import { ConsoleLogger } from './Logger';
+import type { ISpecScanner } from './interfaces/ISpecScanner';
+import type {
   ISpecStore,
   ISpecExplorer,
   SpecServiceConfig,

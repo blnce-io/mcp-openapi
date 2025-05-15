@@ -1,8 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { ISpecProcessor } from '../interfaces/ISpecProcessor';
-import { SpecScanResult } from '../interfaces/ISpecScanner';
+import type { ISpecProcessor } from '../interfaces/ISpecProcessor';
+import type { SpecScanResult } from '../interfaces/ISpecScanner';
 import { DefaultSpecScanner } from '../SpecScanner';
 
 // Only mock the processor since we want to test actual file scanning

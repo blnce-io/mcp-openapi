@@ -1,11 +1,11 @@
 import fs from 'fs/promises';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import path from 'path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { DefaultSpecProcessor } from '../SpecProcessor';
 import { DefaultSpecScanner } from '../SpecScanner';
 import { FileSystemSpecService, SpecServiceError } from '../SpecService';
-import { SpecCatalogEntry, SpecServiceConfig } from '../interfaces/ISpecService';
+import type { SpecCatalogEntry, SpecServiceConfig } from '../interfaces/ISpecService';
 import { ConsoleLogger } from '../Logger';
 
 describe('FileSystemSpecService', () => {

@@ -1,8 +1,9 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { stringify } from 'yaml';
 import { z } from 'zod';
-import { ISpecExplorer } from './core/interfaces/ISpecService';
-import { ConsoleLogger, Logger } from './core/Logger';
+import type { ISpecExplorer } from './core/interfaces/ISpecService';
+import type { Logger } from './core/Logger';
+import { ConsoleLogger } from './core/Logger';
 
 export const VERSION = '0.0.4';
 

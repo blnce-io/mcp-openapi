@@ -2,7 +2,7 @@ import { describe, beforeAll, afterAll, it, expect } from 'vitest';
 import fs from 'fs/promises';
 import path from 'path';
 import { FileSystemSpecService } from '../SpecService';
-import { SpecServiceConfig } from '../interfaces/ISpecService';
+import type { SpecServiceConfig } from '../interfaces/ISpecService';
 import { DefaultSpecScanner } from '../SpecScanner';
 import { DefaultSpecProcessor } from '../SpecProcessor';
 import { ConsoleLogger } from '../Logger';

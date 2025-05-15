@@ -1,6 +1,6 @@
 import path from 'path';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { SpecServiceConfig } from './core/interfaces/ISpecService';
+import type { SpecServiceConfig } from './core/interfaces/ISpecService';
 import { ConsoleLogger } from './core/Logger';
 import { DefaultSpecProcessor } from './core/SpecProcessor';
 import { DefaultSpecScanner } from './core/SpecScanner';

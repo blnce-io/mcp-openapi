@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { DefaultSpecProcessor } from '../SpecProcessor';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 import $RefParser from '@apidevtools/json-schema-ref-parser';
 
 type DereferenceFunction = typeof $RefParser.dereference;
