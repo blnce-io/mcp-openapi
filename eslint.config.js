@@ -24,6 +24,7 @@ export default tseslint.config(
       },
     },
     rules: {
+      'no-console': 'error',
       'import/no-cycle': 'error',
       'import/no-useless-path-segments': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
