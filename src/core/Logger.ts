@@ -1,6 +1,6 @@
 import * as logger from '../infra/logger';
 
-export interface LogContext {
+interface LogContext {
   [key: string]: unknown;
 }
 

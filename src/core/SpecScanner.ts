@@ -9,7 +9,7 @@ import type { ISpecScanner, SpecFileType, SpecScanResult } from './interfaces/IS
 /**
  * Custom error class for spec scanning related errors
  */
-export class SpecScanError extends Error {
+class SpecScanError extends Error {
   constructor(
     message: string,
     public readonly filename: string,

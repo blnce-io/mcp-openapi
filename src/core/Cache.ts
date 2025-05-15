@@ -1,10 +1,10 @@
-export interface CacheOptions {
+interface CacheOptions {
   maxSize?: number;
   ttl?: number;
   cleanupInterval?: number;
 }
 
-export interface CacheEntry<T> {
+interface CacheEntry<T> {
   value: T;
   timestamp: number;
 }

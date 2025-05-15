@@ -20,18 +20,6 @@ export interface SpecScanResult {
 }
 
 /**
- * Entry in the specification catalog
- */
-export interface SpecCatalogEntry {
-  /** Unique identifier */
-  id: string;
-  /** Human readable title */
-  title: string;
-  /** Description of the specification */
-  description: string;
-}
-
-/**
  * Scan a folder for OpenAPI specifications
  * Uses async generator for memory-efficient processing
  * The scanner can use cache strategy to determine if a file has changed

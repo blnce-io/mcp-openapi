@@ -1,18 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types';
 
 /**
- * Identifies a specific OpenAPI specification
- */
-export interface SpecIdentifier {
-  /** Unique identifier for the specification */
-  specId: string;
-  /** Optional title of the specification */
-  title?: string;
-  /** Optional version of the specification */
-  version?: string;
-}
-
-/**
  * Process OpenAPI specifications into a dereferenced version.
  * Can optionally validate the spec and remove unused components.
  */

@@ -27,7 +27,7 @@ export interface SpecServiceConfig {
  * URI format: apis://{specId}/operations/{operationId}
  * or apis://{specId}/schemas/{schemaName}
  */
-export interface SpecUri {
+interface SpecUri {
   /** Unique identifier for the specification */
   specId: string;
   /** Type of the URI target */
@@ -177,19 +177,4 @@ export interface ISpecExplorer {
    * Search for schemas across specifications
    */
   searchSchemas(query: string, specId?: string): Promise<SpecSchemaEntry[]>;
-}
-
-/**
- * Interface for serializing operation and schema results
- */
-export interface IResultSerializer {
-  /**
-   * Serialize an operation result to string
-   */
-  serializeOperation(result: LoadOperationResult): string;
-
-  /**
-   * Serialize a schema result to string
-   */
-  serializeSchema(result: LoadSchemaResult): string;
 }
