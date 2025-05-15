@@ -1,4 +1,4 @@
-import { getRequestContext } from "./request-context.ts";
+import { getRequestContext } from './request-context.ts';
 
 export function log(...args: unknown[]): void {
   const context = getRequestContext();

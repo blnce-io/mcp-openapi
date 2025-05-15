@@ -3,13 +3,13 @@
  */
 export interface SpecSource {
   /** Type of the source (URL, file system, or git repository) */
-  type: "url" | "file" | "git";
+  type: 'url' | 'file' | 'git';
   /** Location of the source (URL, file path, or git URL) */
   location: string;
   /** Optional authentication configuration */
   auth?: {
     /** Type of authentication */
-    type: "basic" | "token" | "oauth2";
+    type: 'basic' | 'token' | 'oauth2';
     /** Authentication credentials */
     credentials: Record<string, string>;
   };

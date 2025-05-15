@@ -165,22 +165,22 @@ describe('DefaultSpecProcessor', () => {
                   type: 'object',
                   properties: {
                     name: { type: 'string' },
-                    age: { type: 'number' }
+                    age: { type: 'number' },
                   },
-                  required: ['name']
+                  required: ['name'],
                 },
                 {
                   type: 'object',
                   properties: {
                     email: { type: 'string' },
-                    age: { type: 'integer', minimum: 0 }
+                    age: { type: 'integer', minimum: 0 },
                   },
-                  required: ['email']
-                }
-              ]
-            }
-          }
-        }
+                  required: ['email'],
+                },
+              ],
+            },
+          },
+        },
       };
 
       const expectedSchema = {
@@ -188,9 +188,9 @@ describe('DefaultSpecProcessor', () => {
         properties: {
           name: { type: 'string' },
           email: { type: 'string' },
-          age: { type: 'integer', minimum: 0 }
+          age: { type: 'integer', minimum: 0 },
         },
-        required: ['name', 'email']
+        required: ['name', 'email'],
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
@@ -217,31 +217,31 @@ describe('DefaultSpecProcessor', () => {
                           type: 'object',
                           properties: {
                             id: { type: 'string' },
-                            name: { type: 'string' }
+                            name: { type: 'string' },
                           },
-                          required: ['id']
+                          required: ['id'],
                         },
                         {
                           type: 'object',
                           properties: {
-                            email: { type: 'string' }
+                            email: { type: 'string' },
                           },
-                          required: ['email']
-                        }
-                      ]
-                    }
-                  }
+                          required: ['email'],
+                        },
+                      ],
+                    },
+                  },
                 },
                 {
                   type: 'object',
                   properties: {
-                    metadata: { type: 'object' }
-                  }
-                }
-              ]
-            }
-          }
-        }
+                    metadata: { type: 'object' },
+                  },
+                },
+              ],
+            },
+          },
+        },
       };
 
       const expectedSchema = {
@@ -252,12 +252,12 @@ describe('DefaultSpecProcessor', () => {
             properties: {
               id: { type: 'string' },
               name: { type: 'string' },
-              email: { type: 'string' }
+              email: { type: 'string' },
             },
-            required: ['id', 'email']
+            required: ['id', 'email'],
           },
-          metadata: { type: 'object' }
-        }
+          metadata: { type: 'object' },
+        },
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
@@ -280,22 +280,22 @@ describe('DefaultSpecProcessor', () => {
                   {
                     type: 'object',
                     properties: {
-                      id: { type: 'string' }
+                      id: { type: 'string' },
                     },
-                    required: ['id']
+                    required: ['id'],
                   },
                   {
                     type: 'object',
                     properties: {
-                      value: { type: 'number' }
+                      value: { type: 'number' },
                     },
-                    required: ['value']
-                  }
-                ]
-              }
-            }
-          }
-        }
+                    required: ['value'],
+                  },
+                ],
+              },
+            },
+          },
+        },
       };
 
       const expectedSchema = {
@@ -304,10 +304,10 @@ describe('DefaultSpecProcessor', () => {
           type: 'object',
           properties: {
             id: { type: 'string' },
-            value: { type: 'number' }
+            value: { type: 'number' },
           },
-          required: ['id', 'value']
-        }
+          required: ['id', 'value'],
+        },
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
@@ -329,25 +329,25 @@ describe('DefaultSpecProcessor', () => {
                 {
                   type: 'object',
                   properties: {
-                    name: { type: 'string' }
-                  }
-                }
+                    name: { type: 'string' },
+                  },
+                },
               ],
               example: { name: 'John' },
-              deprecated: true
-            }
-          }
-        }
+              deprecated: true,
+            },
+          },
+        },
       };
 
       const expectedSchema = {
         type: 'object',
         properties: {
-          name: { type: 'string' }
+          name: { type: 'string' },
         },
         description: 'Test schema description',
         example: { name: 'John' },
-        deprecated: true
+        deprecated: true,
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
@@ -366,19 +366,19 @@ describe('DefaultSpecProcessor', () => {
             EmptyAllOf: {
               type: 'object',
               properties: {
-                test: { type: 'string' }
+                test: { type: 'string' },
               },
-              allOf: []
-            }
-          }
-        }
+              allOf: [],
+            },
+          },
+        },
       };
 
       const expectedSchema = {
         type: 'object',
         properties: {
-          test: { type: 'string' }
-        }
+          test: { type: 'string' },
+        },
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
@@ -402,40 +402,41 @@ describe('DefaultSpecProcessor', () => {
                         {
                           type: 'object',
                           properties: {
-                            name: { type: 'string' }
-                          }
+                            name: { type: 'string' },
+                          },
                         },
                         {
                           type: 'object',
                           properties: {
-                            age: { type: 'number' }
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
+                            age: { type: 'number' },
+                          },
+                        },
+                      ],
+                    },
+                  },
+                },
               },
-              responses: {}
-            }
-          }
-        }
+              responses: {},
+            },
+          },
+        },
       };
 
       const expectedSchema = {
         type: 'object',
         properties: {
           name: { type: 'string' },
-          age: { type: 'number' }
-        }
+          age: { type: 'number' },
+        },
       };
 
       vi.mocked($RefParser.dereference).mockResolvedValueOnce(spec as unknown as any);
 
       const result = await processor.process(spec);
-      const requestSchema = (result.paths['/test']?.post?.requestBody as OpenAPIV3.RequestBodyObject)
-        ?.content?.['application/json']?.schema;
+      const requestSchema = (result.paths['/test']?.post?.requestBody as OpenAPIV3.RequestBodyObject)?.content?.[
+        'application/json'
+      ]?.schema;
       expect(requestSchema).toEqual(expectedSchema);
     });
   });
-}); 
+});

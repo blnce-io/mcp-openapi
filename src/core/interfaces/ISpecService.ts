@@ -1,4 +1,4 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3 } from 'openapi-types';
 
 /**
  * Configuration options for the FileSystemSpecService
@@ -31,7 +31,7 @@ export interface SpecUri {
   /** Unique identifier for the specification */
   specId: string;
   /** Type of the URI target */
-  type: "operation" | "schema" | "specification";
+  type: 'operation' | 'schema' | 'specification';
   /** Identifier within the type (e.g., operationId or schemaName) */
   identifier: string;
 }
@@ -156,35 +156,22 @@ export interface ISpecExplorer {
   /**
    * Find a schema by name within a specification
    */
-  findSchemaByName(
-    specId: string,
-    schemaName: string
-  ): Promise<LoadSchemaResult | null>;
+  findSchemaByName(specId: string, schemaName: string): Promise<LoadSchemaResult | null>;
 
   /**
    * Find an operation by its ID within a specification
    */
-  findOperationById(
-    specId: string,
-    operationId: string
-  ): Promise<LoadOperationResult | null>;
+  findOperationById(specId: string, operationId: string): Promise<LoadOperationResult | null>;
 
   /**
    * Find an operation by path and method when operationId is not known
    */
-  findOperationByPathAndMethod(
-    specId: string,
-    path: string,
-    method: string
-  ): Promise<LoadOperationResult | null>;
+  findOperationByPathAndMethod(specId: string, path: string, method: string): Promise<LoadOperationResult | null>;
 
   /**
    * Search for operations across specifications
    */
-  searchOperations(
-    query: string,
-    specId?: string
-  ): Promise<LoadOperationResult[]>;
+  searchOperations(query: string, specId?: string): Promise<LoadOperationResult[]>;
 
   /**
    * Search for schemas across specifications

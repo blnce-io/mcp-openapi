@@ -17,8 +17,8 @@ describe('FileSystemSpecService - Explorer', () => {
     dereferencedDir: '_dereferenced',
     cache: {
       maxSize: 100,
-      ttl: 1000 * 60 * 5 // 5 minutes for tests
-    }
+      ttl: 1000 * 60 * 5, // 5 minutes for tests
+    },
   });
 
   beforeAll(async () => {
@@ -29,9 +29,9 @@ describe('FileSystemSpecService - Explorer', () => {
     const scanner = new DefaultSpecScanner(new DefaultSpecProcessor());
     const config = createTestConfig(testDataDir);
     const logger = new ConsoleLogger();
-    
+
     service = new FileSystemSpecService(scanner, config, logger);
-    
+
     // Initialize service (this will scan and persist specs)
     await service.initialize();
   });
@@ -166,8 +166,8 @@ describe('FileSystemSpecService - Explorer', () => {
 
       // Assert
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.operation.operationId === 'listPets')).toBe(true);
-      expect(results.some(r => r.operation.operationId === 'listUsers')).toBe(true);
+      expect(results.some((r) => r.operation.operationId === 'listPets')).toBe(true);
+      expect(results.some((r) => r.operation.operationId === 'listUsers')).toBe(true);
     });
 
     it('should find operations in specific spec when specId is provided', async () => {
@@ -195,8 +195,8 @@ describe('FileSystemSpecService - Explorer', () => {
 
       // Assert
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.name === 'Task')).toBe(true);
-      expect(results.some(r => r.name === 'BaseTask')).toBe(true);
+      expect(results.some((r) => r.name === 'Task')).toBe(true);
+      expect(results.some((r) => r.name === 'BaseTask')).toBe(true);
     });
 
     it('should find schemas in specific spec when specId is provided', async () => {
@@ -205,8 +205,8 @@ describe('FileSystemSpecService - Explorer', () => {
 
       // Assert
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(r => r.name === 'Pet')).toBe(true);
-      expect(results.some(r => r.name === 'PetWithVaccinations')).toBe(true);
+      expect(results.some((r) => r.name === 'Pet')).toBe(true);
+      expect(results.some((r) => r.name === 'PetWithVaccinations')).toBe(true);
     });
 
     it('should return empty array when no matches found', async () => {

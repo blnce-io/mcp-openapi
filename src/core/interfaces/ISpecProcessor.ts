@@ -1,4 +1,4 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3 } from 'openapi-types';
 
 /**
  * Identifies a specific OpenAPI specification
@@ -23,4 +23,4 @@ export interface ISpecProcessor {
    * @returns A processed version of the OpenAPI document
    */
   process(spec: OpenAPIV3.Document): Promise<OpenAPIV3.Document>;
-} 
+}

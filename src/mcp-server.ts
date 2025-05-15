@@ -13,8 +13,8 @@ let server: McpServer | null = null;
 export function initMcpServer(): void {
   const specServiceConfig: SpecServiceConfig = {
     basePath: getConfig('OPENAPI_SPECS_DIRECTORY') || path.join(process.cwd(), 'openapi-specs'),
-    catalogDir: "_catalog",
-    dereferencedDir: "_dereferenced",
+    catalogDir: '_catalog',
+    dereferencedDir: '_dereferenced',
     retryAttempts: 3,
     retryDelay: 1000,
     cache: {
@@ -26,7 +26,7 @@ export function initMcpServer(): void {
   const specService = new FileSystemSpecService(
     new DefaultSpecScanner(new DefaultSpecProcessor()),
     specServiceConfig,
-    logger
+    logger,
   );
   server = new McpService(specService).createServer();
 }

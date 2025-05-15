@@ -1,4 +1,4 @@
-import { defineBuildConfig } from 'unbuild'
+import { defineBuildConfig } from 'unbuild';
 
 export default defineBuildConfig({
   entries: ['src/http-server'],
@@ -8,5 +8,5 @@ export default defineBuildConfig({
     emitCJS: false,
     inlineDependencies: true,
   },
-  failOnWarn: false
-}) 
+  failOnWarn: false,
+});

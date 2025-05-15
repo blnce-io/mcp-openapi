@@ -3,7 +3,7 @@ import * as logger from './infra/logger';
 import { initMcpServer } from './mcp-server';
 
 initMcpServer();
-bootstrapHttpServer().catch(error => {
+bootstrapHttpServer().catch((error) => {
   logger.error(error);
   process.exit(1);
-})
+});

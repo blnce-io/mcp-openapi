@@ -1,9 +1,9 @@
-import { OpenAPIV3 } from "openapi-types";
+import { OpenAPIV3 } from 'openapi-types';
 
 /**
  * Supported file types for OpenAPI specifications
  */
-export type SpecFileType = "json" | "yaml" | "invalid";
+export type SpecFileType = 'json' | 'yaml' | 'invalid';
 
 /**
  * Result of scanning a single OpenAPI spec file
@@ -50,4 +50,4 @@ export interface ISpecScanner {
    * @param folderPath Path to folder containing OpenAPI specs
    */
   scan(folderPath: string): AsyncGenerator<SpecScanResult, void, unknown>;
-} 
+}

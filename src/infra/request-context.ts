@@ -1,4 +1,4 @@
-import asyncHooks from "async_hooks";
+import asyncHooks from 'async_hooks';
 
 const store = new Map();
 

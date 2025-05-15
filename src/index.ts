@@ -1,17 +1,17 @@
 import path from 'path';
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { SpecServiceConfig } from "./core/interfaces/ISpecService";
-import { ConsoleLogger } from "./core/Logger";
-import { DefaultSpecProcessor } from "./core/SpecProcessor";
-import { DefaultSpecScanner } from "./core/SpecScanner";
-import { FileSystemSpecService } from "./core/SpecService";
-import { McpService } from "./McpService";
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { SpecServiceConfig } from './core/interfaces/ISpecService';
+import { ConsoleLogger } from './core/Logger';
+import { DefaultSpecProcessor } from './core/SpecProcessor';
+import { DefaultSpecScanner } from './core/SpecScanner';
+import { FileSystemSpecService } from './core/SpecService';
+import { McpService } from './McpService';
 
 // Configuration for the spec service
 const specServiceConfig: SpecServiceConfig = {
   basePath: path.join(process.cwd(), 'openapi-specs'),
-  catalogDir: "_catalog",
-  dereferencedDir: "_dereferenced",
+  catalogDir: '_catalog',
+  dereferencedDir: '_dereferenced',
   retryAttempts: 3,
   retryDelay: 1000,
   cache: {
@@ -27,7 +27,7 @@ const logger = new ConsoleLogger();
 const specService = new FileSystemSpecService(
   new DefaultSpecScanner(new DefaultSpecProcessor()),
   specServiceConfig,
-  logger
+  logger,
 );
 
 // Create and configure the MCP service

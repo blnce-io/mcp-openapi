@@ -1,6 +1,6 @@
-import $RefParser from "@apidevtools/json-schema-ref-parser";
-import { OpenAPIV3 } from "openapi-types";
-import { ISpecProcessor } from "./interfaces/ISpecProcessor";
+import $RefParser from '@apidevtools/json-schema-ref-parser';
+import { OpenAPIV3 } from 'openapi-types';
+import { ISpecProcessor } from './interfaces/ISpecProcessor';
 
 /**
  * Represents a JSON Schema object with potential allOf combinations
@@ -39,12 +39,8 @@ export class DefaultSpecProcessor implements ISpecProcessor {
 
     // Process components schemas if they exist
     if (processedSpec.components?.schemas) {
-      for (const [key, schema] of Object.entries(
-        processedSpec.components.schemas
-      )) {
-        processedSpec.components.schemas[key] = this.processSchema(
-          schema as SchemaOrRef
-        );
+      for (const [key, schema] of Object.entries(processedSpec.components.schemas)) {
+        processedSpec.components.schemas[key] = this.processSchema(schema as SchemaOrRef);
       }
     }
 
@@ -61,27 +57,15 @@ export class DefaultSpecProcessor implements ISpecProcessor {
    * @param pathItem The path item to process
    */
   private processPathItem(pathItem: OpenAPIV3.PathItemObject): void {
-    const operations = [
-      "get",
-      "put",
-      "post",
-      "delete",
-      "options",
-      "head",
-      "patch",
-      "trace",
-    ];
+    const operations = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
     for (const op of operations) {
-      const operation = pathItem[
-        op as keyof OpenAPIV3.PathItemObject
-      ] as OpenAPIV3.OperationObject;
+      const operation = pathItem[op as keyof OpenAPIV3.PathItemObject] as OpenAPIV3.OperationObject;
       if (!operation) continue;
 
       // Process request body schema
       if (operation.requestBody) {
-        const requestBody =
-          operation.requestBody as OpenAPIV3.RequestBodyObject;
+        const requestBody = operation.requestBody as OpenAPIV3.RequestBodyObject;
         for (const mediaType of Object.values(requestBody.content || {})) {
           if (mediaType.schema) {
             mediaType.schema = this.processSchema(mediaType.schema);
@@ -131,7 +115,7 @@ export class DefaultSpecProcessor implements ISpecProcessor {
     }
 
     // Process array items if present
-    if (schema.type === "array" && schema.items) {
+    if (schema.type === 'array' && schema.items) {
       schema.items = this.processSchema(schema.items as SchemaOrRef);
     }
 
@@ -164,7 +148,7 @@ export class DefaultSpecProcessor implements ISpecProcessor {
    */
   private mergeSchemas(schemas: SchemaOrRef[]): SchemaObject {
     const merged: SchemaObject = {
-      type: "object",
+      type: 'object',
       properties: {},
       required: [] as string[],
     };
@@ -182,16 +166,13 @@ export class DefaultSpecProcessor implements ISpecProcessor {
 
       // Merge required fields
       if (schema.required) {
-        const requiredSet = new Set([
-          ...(merged.required || []),
-          ...schema.required,
-        ]);
+        const requiredSet = new Set([...(merged.required || []), ...schema.required]);
         merged.required = Array.from(requiredSet);
       }
 
       // Merge other fields
       for (const [key, value] of Object.entries(schema)) {
-        if (key !== "properties" && key !== "required" && key !== "type") {
+        if (key !== 'properties' && key !== 'required' && key !== 'type') {
           (merged as any)[key] = value;
         }
       }
@@ -209,6 +190,6 @@ export class DefaultSpecProcessor implements ISpecProcessor {
    * Type guard to check if a schema is a SchemaObject (not a ReferenceObject)
    */
   private isSchemaObject(schema: SchemaOrRef): schema is SchemaObject {
-    return !("$ref" in schema);
+    return !('$ref' in schema);
   }
 }

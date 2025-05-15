@@ -1,14 +1,10 @@
-import fs from "fs/promises";
-import { OpenAPIV3 } from "openapi-types";
-import path from "path";
-import swagger2openapi from "swagger2openapi";
-import { parse } from "yaml";
-import { ISpecProcessor } from "./interfaces/ISpecProcessor";
-import {
-  ISpecScanner,
-  SpecFileType,
-  SpecScanResult,
-} from "./interfaces/ISpecScanner";
+import fs from 'fs/promises';
+import { OpenAPIV3 } from 'openapi-types';
+import path from 'path';
+import swagger2openapi from 'swagger2openapi';
+import { parse } from 'yaml';
+import { ISpecProcessor } from './interfaces/ISpecProcessor';
+import { ISpecScanner, SpecFileType, SpecScanResult } from './interfaces/ISpecScanner';
 
 /**
  * Custom error class for spec scanning related errors
@@ -17,10 +13,10 @@ export class SpecScanError extends Error {
   constructor(
     message: string,
     public readonly filename: string,
-    public readonly cause?: Error
+    public readonly cause?: Error,
   ) {
     super(message);
-    this.name = "SpecScanError";
+    this.name = 'SpecScanError';
   }
 }
 
@@ -37,12 +33,10 @@ export class DefaultSpecScanner implements ISpecScanner {
    * @param folderPath - Path to the directory containing OpenAPI specs
    * @throws {SpecScanError} If the folder doesn't exist or isn't readable
    */
-  async *scan(
-    folderPath: string
-  ): AsyncGenerator<SpecScanResult, void, unknown> {
+  async *scan(folderPath: string): AsyncGenerator<SpecScanResult, void, unknown> {
     // Validate input
     if (!folderPath) {
-      throw new Error("folderPath is required");
+      throw new Error('folderPath is required');
     }
 
     try {
@@ -67,7 +61,7 @@ export class DefaultSpecScanner implements ISpecScanner {
       throw new SpecScanError(
         `Failed to read directory: ${folderPath}`,
         folderPath,
-        error instanceof Error ? error : new Error(String(error))
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -79,27 +73,21 @@ export class DefaultSpecScanner implements ISpecScanner {
    * @returns The processed spec result or null if the file type is invalid
    * @throws {SpecScanError} If there's an error processing the file
    */
-  private async processFile(
-    folderPath: string,
-    filename: string
-  ): Promise<SpecScanResult | null> {
+  private async processFile(folderPath: string, filename: string): Promise<SpecScanResult | null> {
     const fileType = this.getFileType(filename);
-    if (fileType === "invalid") {
+    if (fileType === 'invalid') {
       return null;
     }
 
     const filePath = path.join(folderPath, filename);
 
     try {
-      const content = await fs.readFile(filePath, "utf-8");
+      const content = await fs.readFile(filePath, 'utf-8');
       const specObject = await this.parseSpec(content, fileType);
 
       // Validate basic spec structure
       if (!this.isValidSpecObject(specObject)) {
-        throw new SpecScanError(
-          "Invalid OpenAPI specification format",
-          filename
-        );
+        throw new SpecScanError('Invalid OpenAPI specification format', filename);
       }
 
       const specId = this.extractSpecId(specObject, filename);
@@ -114,7 +102,7 @@ export class DefaultSpecScanner implements ISpecScanner {
       throw new SpecScanError(
         `Failed to process spec file: ${filename}`,
         filename,
-        error instanceof Error ? error : new Error(String(error))
+        error instanceof Error ? error : new Error(String(error)),
       );
     }
   }
@@ -126,13 +114,13 @@ export class DefaultSpecScanner implements ISpecScanner {
    */
   private getFileType(filePath: string): SpecFileType {
     const ext = path.extname(filePath).toLowerCase();
-    if (ext === ".json") {
-      return "json";
+    if (ext === '.json') {
+      return 'json';
     }
-    if (ext === ".yaml" || ext === ".yml") {
-      return "yaml";
+    if (ext === '.yaml' || ext === '.yml') {
+      return 'yaml';
     }
-    return "invalid";
+    return 'invalid';
   }
 
   /**
@@ -141,20 +129,16 @@ export class DefaultSpecScanner implements ISpecScanner {
    * @param fileType - Type of the file (json or yaml)
    * @returns Parsed and potentially converted spec object
    */
-  private async parseSpec(
-    content: string,
-    fileType: "json" | "yaml"
-  ): Promise<unknown> {
+  private async parseSpec(content: string, fileType: 'json' | 'yaml'): Promise<unknown> {
     try {
-      const parsedContent =
-        fileType === "json" ? JSON.parse(content) : parse(content);
+      const parsedContent = fileType === 'json' ? JSON.parse(content) : parse(content);
 
       // Check if this is a Swagger 2.0 spec
       if (
-        typeof parsedContent === "object" &&
+        typeof parsedContent === 'object' &&
         parsedContent !== null &&
-        "swagger" in parsedContent &&
-        parsedContent.swagger === "2.0"
+        'swagger' in parsedContent &&
+        parsedContent.swagger === '2.0'
       ) {
         // Convert Swagger 2.0 to OpenAPI 3.0
         const options = {
@@ -163,44 +147,31 @@ export class DefaultSpecScanner implements ISpecScanner {
         };
 
         try {
-          const converted = await new Promise<OpenAPIV3.Document>(
-            (resolve, reject) => {
-              swagger2openapi.convertObj(
-                parsedContent,
-                options,
-                (
-                  err: Error | null,
-                  result: { openapi: OpenAPIV3.Document }
-                ) => {
-                  if (err) {
-                    reject(
-                      new Error(`Swagger 2.0 conversion failed: ${err.message}`)
-                    );
-                  } else {
-                    resolve(result.openapi);
-                  }
+          const converted = await new Promise<OpenAPIV3.Document>((resolve, reject) => {
+            swagger2openapi.convertObj(
+              parsedContent,
+              options,
+              (err: Error | null, result: { openapi: OpenAPIV3.Document }) => {
+                if (err) {
+                  reject(new Error(`Swagger 2.0 conversion failed: ${err.message}`));
+                } else {
+                  resolve(result.openapi);
                 }
-              );
-            }
-          );
+              },
+            );
+          });
 
           return converted;
         } catch (error) {
           throw new Error(
-            `Failed to convert Swagger 2.0 spec: ${
-              error instanceof Error ? error.message : String(error)
-            }`
+            `Failed to convert Swagger 2.0 spec: ${error instanceof Error ? error.message : String(error)}`,
           );
         }
       }
 
       return parsedContent;
     } catch (error) {
-      throw new Error(
-        `Failed to parse ${fileType} content: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      );
+      throw new Error(`Failed to parse ${fileType} content: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -211,11 +182,7 @@ export class DefaultSpecScanner implements ISpecScanner {
    */
   private isValidSpecObject(spec: unknown): spec is OpenAPIV3.Document {
     return (
-      typeof spec === "object" &&
-      spec !== null &&
-      "info" in spec &&
-      typeof spec.info === "object" &&
-      spec.info !== null
+      typeof spec === 'object' && spec !== null && 'info' in spec && typeof spec.info === 'object' && spec.info !== null
     );
   }
 
@@ -226,6 +193,6 @@ export class DefaultSpecScanner implements ISpecScanner {
    * @returns The extracted spec ID
    */
   private extractSpecId(spec: OpenAPIV3.Document, defaultId: string): string {
-    return (spec.info as any)["x-spec-id"] || defaultId;
+    return (spec.info as any)['x-spec-id'] || defaultId;
   }
 }

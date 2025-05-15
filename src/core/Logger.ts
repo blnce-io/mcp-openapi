@@ -50,4 +50,4 @@ export class ConsoleLogger implements Logger {
   error(messageOrContext: string | LogContext, contextOrMessage?: LogContext | string) {
     this.log('ERROR', messageOrContext, contextOrMessage);
   }
-} 
+}
