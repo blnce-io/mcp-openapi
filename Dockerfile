@@ -1,5 +1,3 @@
-ARG UID=node
-ARG GID=node
 ARG node_version=22.13.0
 ARG alpine_version=3.20
 ARG docker_images_registry=docker.io
@@ -29,30 +27,28 @@ COPY . .
 
 RUN pnpm build
 
-RUN addgroup -S "${GID}" && adduser -S "${UID}" -G "${GID}"
-RUN chown --recursive $UID:$GID ./
-USER ${UID}:${GID}
+RUN addgroup -S node && adduser -S node -G node
+RUN chown --recursive node:node ./
+USER node:node
 
 # Build Prod docker
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} AS production
 
-ARG UID=node
-ARG GID=node
 ARG BUILD_VERSION
 
 ENV NODE_ENV=production
 ENV BUILD_VERSION=${BUILD_VERSION}
 
-RUN addgroup -S "${GID}" && adduser -S "${UID}" -G "${GID}"
+RUN addgroup -S node && adduser -S node -G node
 
 WORKDIR /usr/src/app
 
-COPY --from=cache --chown=${UID}:${GID} /usr/src/app/prod_node_modules ./node_modules
+COPY --from=cache --chown=node:node /usr/src/app/prod_node_modules ./node_modules
 
-COPY --from=development --chown=${UID}:${GID} /usr/src/app/package.json .
-COPY --from=development --chown=${UID}:${GID} /usr/src/app/pnpm-lock.yaml .
+COPY --from=development --chown=node:node /usr/src/app/package.json .
+COPY --from=development --chown=node:node /usr/src/app/pnpm-lock.yaml .
 
-COPY --from=development --chown=${UID}:${GID} /usr/src/app/dist ./dist
+COPY --from=development --chown=node:node /usr/src/app/dist ./dist
 
-USER ${UID}:${GID}
+USER node:node
 CMD ["node", "dist/http-server.mjs"]
