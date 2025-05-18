@@ -29,7 +29,7 @@ COPY . .
 
 RUN pnpm build
 
-RUN if [ ${UID} != node ]; then addgroup -S $GID && adduser -S $UID -G $GID; fi
+RUN addgroup -S $GID && adduser -S $UID -G $GID
 RUN chown --recursive $UID:$GID ./
 USER ${UID}:${GID}
 
@@ -43,7 +43,7 @@ ARG BUILD_VERSION
 ENV NODE_ENV=production
 ENV BUILD_VERSION=${BUILD_VERSION}
 
-RUN if [ ${UID} != node ]; then addgroup -S $GID && adduser -S $UID -G $GID; fi
+RUN addgroup -S $GID && adduser -S $UID -G $GID
 
 WORKDIR /usr/src/app
 
