@@ -28,6 +28,8 @@ RUN pnpm install
 COPY . .
 
 RUN pnpm build
+
+RUN if [ ${UID} != node ]; then addgroup -S $GID && adduser -S $UID -G $GID; fi
 RUN chown --recursive ${UID}:${GID} ./
 
 # Build Prod docker
