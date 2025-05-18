@@ -27,7 +27,6 @@ COPY . .
 
 RUN pnpm build
 
-RUN addgroup -S node && adduser -S node -G node
 RUN chown --recursive node:node ./
 USER node:node
 
@@ -38,8 +37,6 @@ ARG BUILD_VERSION
 
 ENV NODE_ENV=production
 ENV BUILD_VERSION=${BUILD_VERSION}
-
-RUN addgroup -S node && adduser -S node -G node
 
 WORKDIR /usr/src/app
 
