@@ -8,13 +8,13 @@ pipeline {
         REPO_NAME = 'mcp-openapi'
         DOCKER_IMAGE_NAME = 'mcp-openapi'
         DEPLOYMENT = 'mcp-openapi'
+        DEPLOYMENT_SDLC = 'management'
         DOCKER_WORKDIR = '/usr/src/app'
         BRANCH_NAME = "${GIT_BRANCH.split('/').size() > 2 ? GIT_BRANCH.split('/')[1..-1].join('-') : GIT_BRANCH.split('/').join('-')}"
         ECR_REGISTRY = '223287545160.dkr.ecr.us-east-2.amazonaws.com'
         REGION = 'us-east-2'
         ECR_SECRET_ID = "ecr-login"
-        EKS_CLUSTER_SANDBOX = "balance-sandbox"
-        EKS_CLUSTER_PRODUCTION = "balance-prod"
+        EKS_CLUSTER_MANAGEMENT = "balance-management"
     }
     stages {
         stage('Notify slack') {
@@ -44,71 +44,21 @@ pipeline {
                 }
             }
         }
-        stage('Deploy sandbox') {
+        stage('Deploy to Management cluster') {
+            agent {
+                kubernetes {
+                    cloud "k8s-agents"
+                    serviceAccount "jenkins-k8s-jobs"
+                    inheritFrom "jnlp-aws-helm"
+                }
+            }
             stages {
                 stage('Deploy') {
                     steps {
-                      container('jnlp') {
-                        script {
-                            FAILED_STAGE=env.STAGE_NAME
-                            deployService(deployment_name="${DEPLOYMENT}",
-                                        img_tag="${TAG_NAME}", 
-                                        deploy_path="deployment", 
-                                        prod=false)
-                        }
-                      }
-                    }
-                }
-            }
-            post {
-                failure {
-                  container('jnlp') {
-                    script {
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
-                    }
-                  }
-                }
-                aborted {
-                  container('jnlp') {
-                    script {
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
-                    }
-                  }
-                }
-            }
-        }
-        stage('Deploy production') {
-            stages {
-                stage('Deploy') {
-                    steps {
-                      container('jnlp') {
-                        script {
-                            FAILED_STAGE=env.STAGE_NAME
-                            deployService(deployment_name="${DEPLOYMENT}",
-                                        img_tag="${TAG_NAME}", 
-                                        deploy_path="deployment", 
-                                        prod=true)
+                        container("jnlp") {
+                            script { deployHelmChart() }
                         }
                     }
-                  }
-                }
-            }
-            post {
-                failure {
-                  container('jnlp') {
-                    script {
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=true)
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
-                    }
-                  }
-                }
-                aborted {
-                  container('jnlp') {
-                    script {
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=true)
-                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
-                    }
-                  }
                 }
             }
         }
@@ -135,5 +85,20 @@ pipeline {
             cleanWs()
             cleanMachineIfFull()
         }
+    }
+}
+
+def deployHelmChart() {
+    def deployment_dir = "deployment/helm-deployments/${DEPLOYMENT_SDLC}/charts/${DEPLOYMENT}"
+
+    sh "aws eks --region ${REGION} update-kubeconfig --name ${EKS_CLUSTER_MANAGEMENT}"
+
+    def files = []
+    dir(deployment_dir) {
+        files = sh (script: "ls *.values.yaml", returnStdout: true).trim().split("\n")
+    }
+
+    dir ("deployment") {
+        helmUpgrade("${DEPLOYMENT}", "${DEPLOYMENT}", files, "--set image.imageTag=${TAG_NAME} --atomic --install --debug --namespace=default", DEPLOYMENT_SDLC)
     }
 }
