@@ -1,0 +1,157 @@
+pipeline {
+    agent {
+        kubernetes {
+            cloud "k8s-agents"
+            serviceAccount "jenkins-k8s-jobs"
+            inheritFrom "migrations dind playwright jnlp-aws-helm-node"
+            yaml """
+              spec:
+                containers:
+                - name: docker
+                  readinessProbe:
+                    exec:
+                      command: [sh, -c, "ls -S /var/run/docker.sock"]
+                  resources:
+                    requests:
+                      memory: "256Mi"
+                      cpu: "0.5"
+            """
+        }
+    }
+    options {
+        lock("mcp-openapi-cd")
+        disableConcurrentBuilds() 
+    }
+    environment {
+        REPO_NAME = 'mcp-openapi'
+        DOCKER_IMAGE_NAME = 'mcp-openapi'
+        DEPLOYMENT = 'mcp-openapi'
+        DOCKER_WORKDIR = '/usr/src/app'
+        BRANCH_NAME = "${GIT_BRANCH.split('/').size() > 2 ? GIT_BRANCH.split('/')[1..-1].join('-') : GIT_BRANCH.split('/').join('-')}"
+        ECR_REGISTRY = '223287545160.dkr.ecr.us-east-2.amazonaws.com'
+        REGION = 'us-east-2'
+        ECR_SECRET_ID = "ecr-login"
+        EKS_CLUSTER_SANDBOX = "balance-sandbox"
+        EKS_CLUSTER_PRODUCTION = "balance-prod"
+    }
+    stages {
+        stage('Notify slack') {
+            steps {
+                container('docker') {
+                    script { notifySlack(buildStatus="STARTED", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+                }
+            }
+        }
+        stage('Clone repository') { 
+            steps {
+                script {
+                    container('jnlp') {
+                        deleteDir()
+                        checkout scm
+                        dir("deployment")
+                        {
+                            checkout scm: [ $class : 'GitSCM',
+                                branches: [[name: "master"]],
+                                userRemoteConfigs: [[
+                                    credentialsId: 'devops-getbalance-github-repo-token',
+                                    url: "https://github.com/blnce-io/deployment.git"
+                                ]]
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy sandbox') {
+            stages {
+                stage('Deploy') {
+                    steps {
+                      container('jnlp') {
+                        script {
+                            FAILED_STAGE=env.STAGE_NAME
+                            deployService(deployment_name="${DEPLOYMENT}",
+                                        img_tag="${TAG_NAME}", 
+                                        deploy_path="deployment", 
+                                        prod=false)
+                        }
+                      }
+                    }
+                }
+            }
+            post {
+                failure {
+                  container('jnlp') {
+                    script {
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
+                    }
+                  }
+                }
+                aborted {
+                  container('jnlp') {
+                    script {
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
+                    }
+                  }
+                }
+            }
+        }
+        stage('Deploy production') {
+            stages {
+                stage('Deploy') {
+                    steps {
+                      container('jnlp') {
+                        script {
+                            FAILED_STAGE=env.STAGE_NAME
+                            deployService(deployment_name="${DEPLOYMENT}",
+                                        img_tag="${TAG_NAME}", 
+                                        deploy_path="deployment", 
+                                        prod=true)
+                        }
+                    }
+                  }
+                }
+            }
+            post {
+                failure {
+                  container('jnlp') {
+                    script {
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=true)
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
+                    }
+                  }
+                }
+                aborted {
+                  container('jnlp') {
+                    script {
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=true)
+                        revertDeployment(deployment_name="${DEPLOYMENT}", deploy_path="deployment", prod=false)
+                    }
+                  }
+                }
+            }
+        }
+        stage ("Tag docker image as stable and latest") {
+            steps {
+                container('docker') {
+                    script { uploadStableDockerImages("${DOCKER_IMAGE_NAME}", "${TAG_NAME}") }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            container('docker') {
+                script { notifySlack(buildStatus="SUCCESSFUL", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+            }
+        }
+        failure {
+            container('docker') {
+                script { notifySlack(buildStatus="FAILURE", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+            }
+        }
+        cleanup {
+            cleanWs()
+            cleanMachineIfFull()
+        }
+    }
+}
