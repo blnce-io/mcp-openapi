@@ -121,6 +121,8 @@ pipeline {
                             sh """
                               cd ${DOCKER_WORKDIR}
                               ls -ll
+                              echo "$USER"
+                              whoami
                               pnpm test
                             """
                         }
