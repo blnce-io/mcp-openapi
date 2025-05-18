@@ -20,7 +20,7 @@ import type {
 /**
  * Custom error class for spec service related errors
  */
-export class SpecServiceError extends Error {
+class SpecServiceError extends Error {
   constructor(
     message: string,
     public readonly code: 'INIT_ERROR' | 'PERSIST_ERROR' | 'LOAD_ERROR' | 'SCAN_ERROR',
