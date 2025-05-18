@@ -1,23 +1,5 @@
 pipeline {
-    agent {
-        kubernetes {
-            cloud "k8s-agents"
-            serviceAccount "jenkins-k8s-jobs"
-            inheritFrom "migrations dind playwright jnlp-aws-helm-node"
-            yaml """
-              spec:
-                containers:
-                - name: docker
-                  readinessProbe:
-                    exec:
-                      command: [sh, -c, "ls -S /var/run/docker.sock"]
-                  resources:
-                    requests:
-                      memory: "256Mi"
-                      cpu: "0.5"
-            """
-        }
-    }
+    agent any
     options {
         lock("mcp-openapi-cd")
         disableConcurrentBuilds() 
