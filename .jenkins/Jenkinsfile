@@ -120,6 +120,7 @@ pipeline {
                         script {
                             sh """
                               cd ${DOCKER_WORKDIR}
+                              ls -ll
                               pnpm test
                             """
                         }
