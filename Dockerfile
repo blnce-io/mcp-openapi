@@ -28,6 +28,7 @@ RUN pnpm install
 COPY . .
 
 RUN pnpm build
+RUN chown --recursive ${UID}:${GID} ./
 
 # Build Prod docker
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} AS production
