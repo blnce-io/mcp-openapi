@@ -31,6 +31,7 @@ RUN pnpm build
 
 RUN if [ ${UID} != node ]; then addgroup -S $GID && adduser -S $UID -G $GID; fi
 RUN chown --recursive ${UID}:${GID} ./
+USER ${UID}:${GID}
 
 # Build Prod docker
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} AS production
