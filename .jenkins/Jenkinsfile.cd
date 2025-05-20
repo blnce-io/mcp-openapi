@@ -69,7 +69,7 @@ pipeline {
         stage ("Tag docker image as stable and latest") {
             steps {
                 container('docker') {
-                    script { uploadStableDockerImages("${DOCKER_IMAGE_NAME}", "${TAG_NAME}") }
+                    script { uploadStableDockerImages(DOCKER_IMAGE_NAME, TAG_NAME[-7..-1]) }
                 }
             }
         }
