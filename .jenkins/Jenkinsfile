@@ -150,6 +150,7 @@ pipeline {
                 }
             }
         }
+
         stage('Build and Push Docker Management') {
             when {
                 beforeAgent true
@@ -167,6 +168,7 @@ pipeline {
                 }
             }
         }
+
         stage ("Tag git") {
             when {
                 beforeAgent true
@@ -179,7 +181,7 @@ pipeline {
                         usernameVariable: 'username',
                         passwordVariable: 'password')]){
                     sh """
-                        git tag ${COMMIT_SHA.take(7)} ${COMMIT_SHA.take(7)}
+                        git tag ${COMMIT_SHA.take(7)} mcp-openapi-${COMMIT_SHA.take(7)}
                         git push https://$username:$password@github.com/blnce-io/${REPO_NAME}.git ${COMMIT_SHA.take(7)}
                     """
                 }
