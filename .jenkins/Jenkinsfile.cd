@@ -38,7 +38,7 @@ pipeline {
                         dir("deployment")
                         {
                             checkout scm: [ $class : 'GitSCM',
-                                branches: [[name: "feat/br-18593/mcp-openapi"]],
+                                branches: [[name: "master"]],
                                 userRemoteConfigs: [[
                                     credentialsId: 'devops-getbalance-github-repo-token',
                                     url: "https://github.com/blnce-io/deployment.git"
