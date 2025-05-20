@@ -1,0 +1,92 @@
+pipeline {
+    agent {
+        kubernetes {
+            cloud "k8s-agents"
+            serviceAccount "jenkins-k8s-jobs"
+            inheritFrom "jnlp-aws-helm-node"
+        }
+    }
+    options {
+        lock("mcp-openapi-cd")
+        disableConcurrentBuilds() 
+    }
+    environment {
+        REPO_NAME = 'mcp-openapi'
+        DOCKER_IMAGE_NAME = 'mcp-openapi'
+        DEPLOYMENT = 'mcp-openapi'
+        DOCKER_WORKDIR = '/usr/src/app'
+        BRANCH_NAME = "${GIT_BRANCH.split('/').size() > 2 ? GIT_BRANCH.split('/')[1..-1].join('-') : GIT_BRANCH.split('/').join('-')}"
+        ECR_REGISTRY = '223287545160.dkr.ecr.us-east-2.amazonaws.com'
+        REGION = 'us-east-2'
+        ECR_SECRET_ID = "ecr-login"
+        EKS_CLUSTER_MANAGEMENT = "balance-management"
+    }
+    stages {
+        stage('Notify slack') {
+            steps {
+                container('docker') {
+                    script { notifySlack(buildStatus="STARTED", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+                }
+            }
+        }
+        stage('Clone repository') { 
+            steps {
+                script {
+                    container('jnlp') {
+                        deleteDir()
+                        checkout scm
+                        dir("deployment")
+                        {
+                            checkout scm: [ $class : 'GitSCM',
+                                branches: [[name: "feat/br-18593/mcp-openapi"]],
+                                userRemoteConfigs: [[
+                                    credentialsId: 'devops-getbalance-github-repo-token',
+                                    url: "https://github.com/blnce-io/deployment.git"
+                                ]]
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+        stage('Deploy Management') {
+            steps {
+                container("jnlp") {
+                    script {
+                        sh """
+                            aws eks --region ${REGION} update-kubeconfig --name ${EKS_CLUSTER_MANAGEMENT}
+                        """
+                        dir ("deployment") {
+                            helmUpgrade("${DEPLOYMENT}", "${DEPLOYMENT}", 
+                                        ['deployment.values.yaml', 'service.values.yaml'],
+                                        "--namespace=default --set global.namespace=default --set image.imageTag=${params.IMAGE_TAG} --atomic --install --debug", "management")
+                        }
+                    }
+                }
+            }
+        }
+        stage ("Tag docker image as stable and latest") {
+            steps {
+                container('docker') {
+                    script { uploadStableDockerImages("${DOCKER_IMAGE_NAME}", "${TAG_NAME}") }
+                }
+            }
+        }
+    }
+    post {
+        success {
+            container('docker') {
+                script { notifySlack(buildStatus="SUCCESSFUL", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+            }
+        }
+        failure {
+            container('docker') {
+                script { notifySlack(buildStatus="FAILURE", channelType="BE-DEPLOYMENT", repo_name="${REPO_NAME}") }
+            }
+        }
+        cleanup {
+            cleanWs()
+            cleanMachineIfFull()
+        }
+    }
+}
