@@ -28,7 +28,7 @@ COPY . .
 RUN pnpm build
 
 RUN chown --recursive node:node ./
-USER node:node
+USER 1000:1000
 
 # Build Prod docker
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} AS production
@@ -47,5 +47,5 @@ COPY --from=development --chown=node:node /usr/src/app/pnpm-lock.yaml .
 
 COPY --from=development --chown=node:node /usr/src/app/dist ./dist
 
-USER node:node
+USER 1000:1000
 CMD ["node", "dist/http-server.mjs"]

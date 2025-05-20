@@ -57,9 +57,10 @@ pipeline {
                             aws eks --region ${REGION} update-kubeconfig --name ${EKS_CLUSTER_MANAGEMENT}
                         """
                         dir ("deployment") {
+                          docker_tag_name = TAG_NAME[-7..-1]
                             helmUpgrade("${DEPLOYMENT}", "${DEPLOYMENT}", 
                                         ['deployment.values.yaml', 'service.values.yaml'],
-                                        "--namespace=default --set global.namespace=default --set image.imageTag=${params.IMAGE_TAG} --atomic --install --debug", "management")
+                                        "--namespace=default --set global.namespace=default --set image.imageTag=${docker_tag_name} --atomic --install --debug", "management")
                         }
                     }
                 }
