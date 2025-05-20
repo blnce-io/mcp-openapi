@@ -182,7 +182,7 @@ pipeline {
                         passwordVariable: 'password')]){
                     sh """
                         git tag mcp-openapi-${COMMIT_SHA.take(7)}
-                        git push https://$username:$password@github.com/blnce-io/${REPO_NAME}.git ${COMMIT_SHA.take(7)}
+                        git push https://$username:$password@github.com/blnce-io/${REPO_NAME}.git mcp-openapi-${COMMIT_SHA.take(7)}
                     """
                 }
             }
