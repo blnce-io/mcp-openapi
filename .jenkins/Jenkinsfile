@@ -159,9 +159,11 @@ pipeline {
             }
             steps {
                 script{
-                    env.COMMIT_SHA = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
-                    currentBuild.displayName = "${COMMIT_SHA.take(7)}"
-                    buildAndPushImageECR(flags="-f Dockerfile --target production --build-arg docker_images_registry=${ECR_REGISTRY}", img_name="mcp-openapi", img_tag="${COMMIT_SHA.take(7)}")
+                    docker.withRegistry("https://${ECR_REGISTRY}", "ecr:${REGION}:${ECR_SECRET_ID}") {
+                      env.COMMIT_SHA = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
+                      currentBuild.displayName = "${COMMIT_SHA.take(7)}"
+                      buildAndPushImageECR(flags="-f Dockerfile --target production --build-arg docker_images_registry=${ECR_REGISTRY}", img_name="mcp-openapi", img_tag="${COMMIT_SHA.take(7)}")
+                    }
                 }
             }
         }
