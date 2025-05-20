@@ -124,6 +124,12 @@ pipeline {
                     }
                 }
                 stage('Build & Upload image to ECR') {
+                  when {
+                      beforeAgent true
+                      expression {
+                          return ("${GIT_BRANCH}" != "main");
+                      }
+                  }
                     steps {
                         script {
                             if (env.BRANCH_NAME.startsWith('PR')) {
@@ -141,6 +147,39 @@ pipeline {
                             }
                         }
                     }
+                }
+            }
+        }
+        stage('Build and Push Docker Prod') {
+            when {
+                beforeAgent true
+                expression {
+                    return ("${GIT_BRANCH}" == "main");
+                }
+            }
+            steps {
+                script{
+                    env.COMMIT_SHA = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
+                    currentBuild.displayName = "${COMMIT_SHA.take(7)}"
+                    buildAndPushImageECR(flags="-f Dockerfile --target production --build-arg docker_images_registry=${ECR_REGISTRY}", img_name="mcp-openapi", img_tag="${COMMIT_SHA.take(7)}")
+                }
+            }
+        }
+        stage ("Tag git") {
+            when {
+                beforeAgent true
+                expression {
+                    return ("${GIT_BRANCH}" == "main");
+                }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'devops-getbalance-github-repo-token',
+                        usernameVariable: 'username',
+                        passwordVariable: 'password')]){
+                    sh """
+                        git tag ${COMMIT_SHA.take(7)} ${COMMIT_SHA.take(7)}
+                        git push https://$username:$password@github.com/blnce-io/${REPO_NAME}.git ${COMMIT_SHA.take(7)}
+                    """
                 }
             }
         }
