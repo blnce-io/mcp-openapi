@@ -150,7 +150,7 @@ pipeline {
                 }
             }
         }
-        stage('Build and Push Docker Prod') {
+        stage('Build and Push Docker Management') {
             when {
                 beforeAgent true
                 expression {
@@ -185,11 +185,6 @@ pipeline {
         }
     }
     post {
-        success {
-            script {
-                publishPRcommentE2E(repo_name="${REPO_NAME}")
-            }
-        }
         cleanup {
             cleanWs()
             cleanMachineIfFull()
