@@ -54,7 +54,6 @@ router.post(
 );
 
 const handleSessionRequest = async (req: Request, res: Response) => {
-  logger.log('Incoming ' + req.method + ' request', { body: req.body }); // TODO: Remove this
   const sessionId = req.headers['mcp-session-id'] as string | undefined;
   if (!sessionId || !transports[sessionId]) {
     logger.log('MCP session - rejected, bad session');
