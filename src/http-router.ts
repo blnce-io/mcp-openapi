@@ -4,76 +4,56 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { getServer } from './mcp-server';
 import { asyncWrapper } from './infra/async-wrapper';
 import * as logger from './infra/logger';
-import { randomUUID } from 'crypto';
-import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 
 const router = express.Router();
-
-const transports: { [sessionId: string]: StreamableHTTPServerTransport } = {};
 
 router.post(
   '/mcp',
   asyncWrapper(async (req, res) => {
-    const sessionId = req.headers['mcp-session-id'] as string | undefined;
-    let transport: StreamableHTTPServerTransport;
-
-    if (sessionId && transports[sessionId]) {
-      logger.log('MCP transport accepted - already exists');
-      transport = transports[sessionId];
-    } else if (!sessionId && isInitializeRequest(req.body)) {
-      logger.log('MCP transport - created');
-      transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: () => randomUUID(),
-        onsessioninitialized: (sessionId) => (transports[sessionId] = transport),
-      });
-
-      transport.onclose = () => {
-        if (transport.sessionId) {
-          delete transports[transport.sessionId];
-        }
-      };
-
-      const server = getServer();
-      await server.connect(transport);
-    } else {
-      logger.log('MCP transport - rejected, bad session');
-      res.status(400).json({
-        jsonrpc: '2.0',
-        error: {
-          code: -32000,
-          message: 'Bad Request: No valid session ID provided',
-        },
-        id: null,
-      });
-      return;
-    }
-
-    logger.log('MCP transport - handling');
+    const server = getServer();
+    const transport: StreamableHTTPServerTransport = new StreamableHTTPServerTransport({
+      sessionIdGenerator: undefined,
+    });
+    res.on('close', () => {
+      logger.log('Request closed');
+      transport.close();
+      server.close();
+    });
+    await server.connect(transport);
     await transport.handleRequest(req, res, req.body);
   }),
 );
 
-const handleSessionRequest = async (req: Request, res: Response) => {
-  const sessionId = req.headers['mcp-session-id'] as string | undefined;
-  if (!sessionId || !transports[sessionId]) {
-    logger.log('MCP session - rejected, bad session');
-    res.status(400).send('Invalid or missing session ID');
-    return;
-  }
-
-  logger.log('MCP session - accepted');
-  const transport = transports[sessionId];
-  await transport.handleRequest(req, res);
-};
-
 router.get(
   '/mcp',
-  asyncWrapper(async (req: Request, res: Response) => handleSessionRequest(req, res)),
+  asyncWrapper(async (req: Request, res: Response) => {
+    res.writeHead(405).end(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        error: {
+          code: -32601,
+          message: 'Method not allowed.',
+        },
+        id: null,
+      }),
+    );
+  }),
 );
 
 router.delete(
   '/mcp',
-  asyncWrapper(async (req: Request, res: Response) => handleSessionRequest(req, res)),
+  asyncWrapper(async (req: Request, res: Response) => {
+    res.writeHead(405).end(
+      JSON.stringify({
+        jsonrpc: '2.0',
+        error: {
+          code: -32601,
+          message: 'Method not allowed.',
+        },
+        id: null,
+      }),
+    );
+  }),
 );
 
 router.get('/', (request, response) => {
