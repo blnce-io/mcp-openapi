@@ -1,5 +1,5 @@
-ARG node_version=22.13.0
-ARG alpine_version=3.20
+ARG node_version=22.23.4
+ARG alpine_version=3.23
 ARG docker_images_registry=docker.io
 
 FROM ${docker_images_registry}/node:${node_version}-alpine${alpine_version} As cache
