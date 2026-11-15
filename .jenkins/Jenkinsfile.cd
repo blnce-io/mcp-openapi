@@ -53,14 +53,18 @@ pipeline {
             steps {
                 container("jnlp") {
                     script {
-                        sh """
-                            aws eks --region ${REGION} update-kubeconfig --name ${EKS_CLUSTER_MANAGEMENT}
-                        """
-                        dir ("deployment") {
-                          docker_tag_name = TAG_NAME[-7..-1]
-                            helmUpgrade("${DEPLOYMENT}", "${DEPLOYMENT}", 
-                                        ['deployment.values.yaml', 'service.values.yaml'],
-                                        "--namespace=default --set global.namespace=default --set image.imageTag=${docker_tag_name} --atomic --install --debug", "management")
+                        docker_tag_name = TAG_NAME[-7..-1]
+                        if (gitopsEnabled("management")) {
+                            gitopsDeploy(app: "${DEPLOYMENT}", env: "management", tag: "${docker_tag_name}")
+                        } else {
+                            sh """
+                                aws eks --region ${REGION} update-kubeconfig --name ${EKS_CLUSTER_MANAGEMENT}
+                            """
+                            dir ("deployment") {
+                                helmUpgrade("${DEPLOYMENT}", "${DEPLOYMENT}", 
+                                            ['deployment.values.yaml', 'service.values.yaml'],
+                                            "--namespace=default --set global.namespace=default --set image.imageTag=${docker_tag_name} --atomic --install --debug", "management")
+                            }
                         }
                     }
                 }
