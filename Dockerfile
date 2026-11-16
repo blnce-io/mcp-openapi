@@ -1,4 +1,4 @@
-ARG node_version=22.23.4
+ARG node_version=22.23.5
 ARG alpine_version=3.23
 ARG docker_images_registry=docker.io
 
